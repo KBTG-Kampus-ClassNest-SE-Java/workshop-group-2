@@ -1,17 +1,16 @@
-package com.kampus.kbazaar.cart;
+package com.kampus.kbazaar.kpoint;
 
-import com.kampus.kbazaar.product.Product;
 import com.kampus.kbazaar.shopper.Shopper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "cart")
+@Entity(name = "kpoint")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+@AllArgsConstructor
+public class Kpoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +21,7 @@ public class Cart {
     @JoinColumn(name = "shopper_id", referencedColumnName = "id")
     private Shopper shopper;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product[] products;
+    @Column(name = "point")
+    private Integer point;
 
 }
