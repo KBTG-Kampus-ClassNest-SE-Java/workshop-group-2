@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS cart (
     id SERIAL PRIMARY KEY,
-    shopperId INT NOT NULL REFERENCES shopper(id),
-    productId INT NOT NULL REFERENCES product(id),
+    shopper_id INT NOT NULL REFERENCES shopper(id),
+    product_id INT NOT NULL REFERENCES product(id),
     quantity INT NOT NULL
 );
