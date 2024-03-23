@@ -23,5 +23,4 @@ public class Kpoint {
 
     @Column(name = "point")
     private Integer point;
-
 }
