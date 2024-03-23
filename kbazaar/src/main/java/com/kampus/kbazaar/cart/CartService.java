@@ -23,7 +23,7 @@ public class CartService {
         this.shopperRepository = shopperRepository;
     }
 
-    //story_6
+    // story_6
     public ApplyCodeResponse applyCode(String username, ApplyCodeRequest request) {
         Optional<Shopper> shopper = shopperRepository.findByUsername(username);
         if (shopper.isPresent()) {
@@ -37,12 +37,14 @@ public class CartService {
                             promotion.get().getMaxDiscountAmount());
                 }
 
-                boolean skuMatch = request.getProductSkus().stream().anyMatch(x->promotion.get().getProductSkus().contains(x));
+                boolean skuMatch =
+                        request.getProductSkus().stream()
+                                .anyMatch(x -> promotion.get().getProductSkus().contains(x));
                 if (skuMatch) {
                     return new ApplyCodeResponse(
-                        request.getCode(),
-                        promotion.get().getDiscountAmount(),
-                        promotion.get().getMaxDiscountAmount());
+                            request.getCode(),
+                            promotion.get().getDiscountAmount(),
+                            promotion.get().getMaxDiscountAmount());
                 }
                 throw new BadRequestException("Cannot use discount code.");
             } else {

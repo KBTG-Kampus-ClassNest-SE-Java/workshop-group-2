@@ -7,7 +7,6 @@ import com.kampus.kbazaar.security.JwtAuthFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -32,15 +30,14 @@ public class CartControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-//    @InjectMocks private CartController cartController;
+    //    @InjectMocks private CartController cartController;
 
-    @MockBean
-    private CartService cartService;
+    @MockBean private CartService cartService;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-//        this.mockMvc = MockMvcBuilders.standaloneSetup(cartController).build();
+        //        this.mockMvc = MockMvcBuilders.standaloneSetup(cartController).build();
     }
 
     @Test
@@ -49,11 +46,12 @@ public class CartControllerTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void applyCodeIfSuccess_ShouldReturnOk() throws Exception {
-//        String username = "TechNinja";
-//        when(cartService.applyCode(anyString(), any())).thenReturn(new ApplyCodeResponse());
-//        mockMvc.perform(post("/api/v1/carts/{username}/promotions", username).contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//    }
+    //    @Test
+    //    public void applyCodeIfSuccess_ShouldReturnOk() throws Exception {
+    //        String username = "TechNinja";
+    //        when(cartService.applyCode(anyString(), any())).thenReturn(new ApplyCodeResponse());
+    //        mockMvc.perform(post("/api/v1/carts/{username}/promotions",
+    // username).contentType(MediaType.APPLICATION_JSON))
+    //                .andExpect(status().isOk());
+    //    }
 }
