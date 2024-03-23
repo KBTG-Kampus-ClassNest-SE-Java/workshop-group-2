@@ -37,8 +37,11 @@ public class ProductController {
                             schema = @Schema(implementation = NotFoundException.class)))
     @GetMapping("/products")
     public List<ProductResponse> getProducts(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "limit", defaultValue = "5") Integer limit) {
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "limit", required = false) Integer limit) {
+        if (page == null || limit == null) {
+            return productService.getAll();
+        }
         return productService.getProductsByPage(page, limit);
     }
 
