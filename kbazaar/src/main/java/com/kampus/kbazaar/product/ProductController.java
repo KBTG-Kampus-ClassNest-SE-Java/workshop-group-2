@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,13 +39,27 @@ public class ProductController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = NotFoundException.class)))
     @GetMapping("/products")
-    public List<ProductResponse> getProducts(
+    public ResponseEntity<List<ProductResponse>> getProducts(
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit) {
         if (page == null || limit == null) {
-            return productService.getAll();
+            return ResponseEntity.ok(productService.getAll());
         }
-        return productService.getProductsByPage(page, limit);
+        var productsPage = productService.getProductsByPage(page, limit);
+        var productResponse = productsPage.stream().map(Product::toResponse).toList();
+        final HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Content-Type", "application/json");
+        responseHeaders.set(
+                "x-next-page", String.valueOf(productsPage.nextPageable().getPageNumber()));
+        responseHeaders.set("x-page", String.valueOf(productsPage.getPageable().getPageNumber()));
+        responseHeaders.set(
+                "x-prev-page",
+                String.valueOf(productsPage.previousOrFirstPageable().getPageNumber()));
+        responseHeaders.set("x-total", String.valueOf(productsPage.getTotalElements()));
+        responseHeaders.set("x-per-page", String.valueOf(limit));
+        responseHeaders.set("x-total-pages", String.valueOf(productsPage.getTotalPages()));
+
+        return new ResponseEntity<>(productResponse, responseHeaders, HttpStatus.OK);
     }
 
     @ApiResponse(

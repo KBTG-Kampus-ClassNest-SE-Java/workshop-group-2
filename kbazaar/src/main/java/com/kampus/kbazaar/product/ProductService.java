@@ -3,6 +3,7 @@ package com.kampus.kbazaar.product;
 import com.kampus.kbazaar.exceptions.NotFoundException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,10 @@ public class ProductService {
         return productRepository.findAll().stream().map(Product::toResponse).toList();
     }
 
-    public List<ProductResponse> getProductsByPage(Integer page, Integer limit) {
-        return productRepository.findAll(PageRequest.of(page, limit)).stream()
-                .map(Product::toResponse)
-                .toList();
+    public Page<Product> getProductsByPage(Integer page, Integer limit) {
+
+        var products = productRepository.findAll(PageRequest.of(page, limit));
+        return products;
     }
 
     public ProductResponse getBySku(String sku) {
