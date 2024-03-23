@@ -37,13 +37,12 @@ public class CartService {
                             promotion.get().getMaxDiscountAmount());
                 }
 
-                for (String sku : request.getProductSkus()) {
-                    if (sku.contains(promotion.get().getProductSkus())) {
-                        return new ApplyCodeResponse(
-                                request.getCode(),
-                                promotion.get().getDiscountAmount(),
-                                promotion.get().getMaxDiscountAmount());
-                    }
+                boolean skuMatch = request.getProductSkus().stream().anyMatch(x->promotion.get().getProductSkus().contains(x));
+                if (skuMatch) {
+                    return new ApplyCodeResponse(
+                        request.getCode(),
+                        promotion.get().getDiscountAmount(),
+                        promotion.get().getMaxDiscountAmount());
                 }
                 throw new BadRequestException("Cannot use discount code.");
             } else {
