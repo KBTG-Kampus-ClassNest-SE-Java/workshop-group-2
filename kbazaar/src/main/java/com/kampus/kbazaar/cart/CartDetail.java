@@ -17,6 +17,9 @@ public class CartDetail {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "cartId")
+    private Integer cartId;
+
     @Column(name = "sku")
     private String sku;
 

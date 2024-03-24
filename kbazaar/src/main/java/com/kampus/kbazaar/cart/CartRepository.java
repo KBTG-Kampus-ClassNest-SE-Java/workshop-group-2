@@ -1,6 +1,7 @@
 package com.kampus.kbazaar.cart;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,9 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     @Query(value = sqlCart, nativeQuery = true)
     public List<Object[]> findCartDetailById(@Param("shopperId") Long shopperId);
+
+    @Query(
+            value = "select *\n" + "from cart\n" + "where cart.shopperid = :shopperId",
+            nativeQuery = true)
+    Optional<Cart> findByShopperId(@Param("shopperId") Long shopperId);
 }
