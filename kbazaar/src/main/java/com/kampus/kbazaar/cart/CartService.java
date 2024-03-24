@@ -8,6 +8,7 @@ import com.kampus.kbazaar.shopper.Shopper;
 import com.kampus.kbazaar.shopper.ShopperRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,6 +64,38 @@ public class CartService {
         cartResponse.setUserName(userName);
         cartResponse.setCart(cartDb);
         return cartResponse;
+    }
+
+
+    public void findCartDetailById(String userName){
+        Optional<Shopper> optionalShopper = this.shopperRepository.findByUsername(userName);
+
+
+        if (!optionalShopper.isPresent()) {
+            throw  new NotFoundException("username not found");
+        }
+
+        Long shopperId = optionalShopper.get().getId();
+
+        List<Object[]> rs = this.cartRepository.findCartDetailById(shopperId);
+
+
+        for(Object[] array : rs) {
+//            EvaluatedResult eR = new EvaluatedResult();
+//            eR.setCampaignId(bigIntToLong(array[0]+""));
+//            eR.setCampaignName((String)array[1]);
+//            eR.setNumberOfQuestions((int)array[2]);
+//            eR.setFullName((String)array[3]);
+//            eR.setMobileNumber(bigIntToLong(array[4]+""));
+//            eR.setEmailId((String)array[5]);
+//            eR.setCorrectAnswers(bigIntToLong(array[6]+""));
+//
+//            evaluatedResults.add(eR);
+            System.out.println(array[0]);
+            System.out.println(array[1]);
+            System.out.println(array[2]);
+        }
+
     }
 
 }

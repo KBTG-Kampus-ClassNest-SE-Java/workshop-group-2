@@ -36,10 +36,8 @@ public class Cart {
     @Column(name = "id")
     private Integer id;
 
-
     @Column(name = "shopperid")
     private Long shopperId;
-
 
     @Column(name = "productid")
     private Long productId;

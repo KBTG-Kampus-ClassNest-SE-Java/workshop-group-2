@@ -21,13 +21,18 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/carts/test")
+    public ResponseEntity test() { // NOSONAR
+        this.cartService.findCartDetailById("TechNinja");
+        return ResponseEntity.ok().build();
+    }
 
 
     @Operation(summary = "add item to carts")
     @PostMapping("/carts/{username}/items")
     public ResponseEntity<CartResponse> createCart(
             @PathVariable(name = "username") String userName,
-            @RequestBody CartRequest cartRequest){
+            @RequestBody  CartRequest cartRequest){
 
         CartResponse cartResponse = this.cartService.createCart(userName,cartRequest);
 
