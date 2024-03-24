@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CartService {
 
-    @Value("${enabled.shipping.fee}")
+    @Value("${enabled.shipping.fee:false}")
     private boolean enableShippingFee;
 
     private final PromotionRepository promotionRepository;
