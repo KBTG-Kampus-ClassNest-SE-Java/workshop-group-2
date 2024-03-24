@@ -1,12 +1,17 @@
 package com.kampus.kbazaar.cart;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.kampus.kbazaar.security.JwtAuthFilter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,7 +35,7 @@ public class CartControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    //    @InjectMocks private CartController cartController;
+    @InjectMocks private CartController cartController;
 
     @MockBean private CartService cartService;
 
@@ -46,6 +51,38 @@ public class CartControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void createCart_ReturnsCreated() throws Exception {
+
+        CartRequest cartRequest = new CartRequest();
+        cartRequest.setSku("MOBILE-APPLE-IPHONE-12-PRO");
+        cartRequest.setQty(1);
+        String username = "TechNinja";
+
+        CreateCartResponse createCartResponse = new CreateCartResponse();
+        createCartResponse.setUsername(username);
+        createCartResponse.setFee(BigDecimal.valueOf(0));
+        createCartResponse.setTotalDiscount(BigDecimal.valueOf(0));
+        createCartResponse.setTotalPrice(BigDecimal.valueOf(0));
+        CartItem cartItem = new CartItem();
+        cartItem.setSku("MOBILE-APPLE-IPHONE-12-PRO");
+        cartItem.setName("Apple iPhone 12 Pro");
+        cartItem.setDiscount(BigDecimal.valueOf(0));
+        cartItem.setPrice(BigDecimal.valueOf(20990.25));
+        cartItem.setFinalPrice(BigDecimal.valueOf(20990.25));
+        ArrayList<CartItem> cartList = new ArrayList<CartItem>();
+        cartList.add(cartItem);
+        createCartResponse.setItems(cartList);
+
+        when(cartService.createCart(username, cartRequest)).thenReturn(createCartResponse);
+        mockMvc.perform(
+                        post("/api/v1/carts/{username}/items", username)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content("{\"sku\":\"MOBILE-APPLE-IPHONE-12-PRO\",\"qty\":1}"))
+                .andExpect(status().isCreated());
+    }
+
     //    @Test
     //    public void applyCodeIfSuccess_ShouldReturnOk() throws Exception {
     //        String username = "TechNinja";
@@ -54,4 +91,5 @@ public class CartControllerTest {
     // username).contentType(MediaType.APPLICATION_JSON))
     //                .andExpect(status().isOk());
     //    }
+
 }
