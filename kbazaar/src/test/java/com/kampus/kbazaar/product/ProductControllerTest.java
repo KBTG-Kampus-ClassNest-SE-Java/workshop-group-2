@@ -49,7 +49,8 @@ public class ProductControllerTest {
         // Given
 
         // When & Then
-        when(productService.getProductsByPage(0, 20)).thenReturn(new PageImpl<ProductResponse>(new ArrayList<>()));
+        when(productService.getProductsByPage(0, 20))
+                .thenReturn(new PageImpl<ProductResponse>(new ArrayList<>()));
 
         mockMvc.perform(get("/api/v1/products").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
