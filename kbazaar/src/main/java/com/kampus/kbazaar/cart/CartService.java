@@ -129,7 +129,6 @@ public class CartService {
                                         : newCart.getId());
                 BigDecimal totalPriceForReturn = BigDecimal.valueOf(0);
                 BigDecimal totalDiscountForReturn = BigDecimal.valueOf(0);
-                System.out.println(cartDetailList);
                 for (CartDetail item : cartDetailList) {
                     CartItem cartItem =
                             new CartItem(
@@ -143,7 +142,6 @@ public class CartService {
                     totalDiscountForReturn = totalDiscountForReturn.add(item.getDiscount());
 
                     response.getItems().add(cartItem);
-                    System.out.println("Respones:" + response);
                 }
                 if (enableShippingFee) {
                     response.setFee(BigDecimal.valueOf(25));
