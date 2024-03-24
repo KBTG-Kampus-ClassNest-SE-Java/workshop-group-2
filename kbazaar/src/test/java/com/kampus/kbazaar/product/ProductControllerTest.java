@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,12 +49,12 @@ public class ProductControllerTest {
         // Given
 
         // When & Then
-        when(productService.getAll()).thenReturn(new ArrayList<>());
+        when(productService.getProductsByPage(0, 20)).thenReturn(new PageImpl<ProductResponse>(new ArrayList<>()));
 
         mockMvc.perform(get("/api/v1/products").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(productService, times(1)).getAll();
+        verify(productService, times(1)).getProductsByPage(0, 20);
     }
 
     @Test
