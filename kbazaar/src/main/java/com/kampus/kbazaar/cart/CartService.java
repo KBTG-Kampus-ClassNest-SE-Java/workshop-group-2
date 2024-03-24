@@ -3,7 +3,6 @@ package com.kampus.kbazaar.cart;
 import com.kampus.kbazaar.exceptions.BadRequestException;
 import com.kampus.kbazaar.exceptions.NotFoundException;
 import com.kampus.kbazaar.promotion.ApplyCodeRequest;
-import com.kampus.kbazaar.promotion.ApplyCodeResponse;
 import com.kampus.kbazaar.promotion.Promotion;
 import com.kampus.kbazaar.promotion.PromotionRepository;
 import com.kampus.kbazaar.shopper.Shopper;
@@ -31,20 +30,14 @@ public class CartService {
 
             if (promotion.isPresent()) {
                 if (promotion.get().getProductSkus().isBlank()) {
-                    return new ApplyCodeResponse(
-                            request.getCode(),
-                            promotion.get().getDiscountAmount(),
-                            promotion.get().getMaxDiscountAmount());
+                    return new ApplyCodeResponse();
                 }
 
                 boolean skuMatch =
                         request.getProductSkus().stream()
                                 .anyMatch(x -> promotion.get().getProductSkus().contains(x));
                 if (skuMatch) {
-                    return new ApplyCodeResponse(
-                            request.getCode(),
-                            promotion.get().getDiscountAmount(),
-                            promotion.get().getMaxDiscountAmount());
+                    return new ApplyCodeResponse();
                 }
                 throw new BadRequestException("Cannot use discount code.");
             } else {

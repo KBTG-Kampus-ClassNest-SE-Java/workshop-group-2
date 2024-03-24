@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApplyCodeResponse {
     private String username;
-    private List<CartItem> items;
+    private List<CartDetail> items;
     private BigDecimal totalPrice;
     private BigDecimal totalDiscount;
 }
