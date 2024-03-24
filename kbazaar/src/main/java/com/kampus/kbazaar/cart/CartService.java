@@ -9,6 +9,7 @@ import com.kampus.kbazaar.promotion.Promotion;
 import com.kampus.kbazaar.promotion.PromotionRepository;
 import com.kampus.kbazaar.shopper.Shopper;
 import com.kampus.kbazaar.shopper.ShopperRepository;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ public class CartService {
         }
     }
 
+    @Transactional
     public CreateCartResponse createCart(String userName, CartRequest cartRequest) {
         CreateCartResponse response = new CreateCartResponse();
         Optional<Shopper> shopper = shopperRepository.findByUsername(userName);
