@@ -4,7 +4,7 @@ import com.kampus.kbazaar.exceptions.BadRequestException;
 import com.kampus.kbazaar.exceptions.NotFoundException;
 import com.kampus.kbazaar.product.Product;
 import com.kampus.kbazaar.product.ProductRepository;
-import com.kampus.kbazaar.promotion.ApplyCodeRequest;
+import com.kampus.kbazaar.cart.ApplyCodeRequest;
 import com.kampus.kbazaar.promotion.Promotion;
 import com.kampus.kbazaar.promotion.PromotionRepository;
 import com.kampus.kbazaar.shopper.Shopper;

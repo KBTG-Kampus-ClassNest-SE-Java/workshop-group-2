@@ -1,6 +1,6 @@
 package com.kampus.kbazaar.cart;
 
-import com.kampus.kbazaar.promotion.ApplyCodeRequest;
+import com.kampus.kbazaar.cart.ApplyCodeRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
