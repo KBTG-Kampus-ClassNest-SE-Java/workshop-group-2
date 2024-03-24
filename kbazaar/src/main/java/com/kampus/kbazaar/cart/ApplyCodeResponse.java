@@ -1,6 +1,8 @@
-package com.kampus.kbazaar.promotion;
+package com.kampus.kbazaar.cart;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplyCodeResponse {
-    private String code;
-    private BigDecimal discountAmount;
-    private BigDecimal maxDiscountAmount;
+    private String username;
+    private List<CartItem> items;
+    private BigDecimal totalPrice;
+    private BigDecimal totalDiscount;
 }
