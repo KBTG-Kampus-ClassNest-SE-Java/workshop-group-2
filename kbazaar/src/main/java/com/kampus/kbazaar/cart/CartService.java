@@ -4,7 +4,6 @@ import com.kampus.kbazaar.exceptions.BadRequestException;
 import com.kampus.kbazaar.exceptions.NotFoundException;
 import com.kampus.kbazaar.product.Product;
 import com.kampus.kbazaar.product.ProductRepository;
-import com.kampus.kbazaar.promotion.ApplyCodeRequest;
 import com.kampus.kbazaar.promotion.Promotion;
 import com.kampus.kbazaar.promotion.PromotionRepository;
 import com.kampus.kbazaar.shopper.Shopper;
@@ -14,10 +13,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CartService {
+
+    @Value("${enabled.shipping.fee}")
+    private boolean enableShippingFee;
 
     private final PromotionRepository promotionRepository;
     private final ShopperRepository shopperRepository;
@@ -120,7 +123,12 @@ public class CartService {
                     response.setItems(new ArrayList<>());
                     response.getItems().add(cartItem);
                 }
-                response.setFee(BigDecimal.valueOf(0));
+                if (enableShippingFee) {
+                    response.setFee(BigDecimal.valueOf(25));
+                } else {
+                    response.setFee(BigDecimal.valueOf(0));
+                }
+
                 response.setTotalPrice(totalPriceForReturn);
                 response.setTotalDiscount(totalDiscountForReturn);
             }

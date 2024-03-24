@@ -1,4 +1,4 @@
-package com.kampus.kbazaar.promotion;
+package com.kampus.kbazaar.cart;
 
 import java.util.List;
 import lombok.Data;
