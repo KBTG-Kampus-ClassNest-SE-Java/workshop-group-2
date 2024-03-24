@@ -90,26 +90,46 @@ public class CartService {
 
             Optional<Product> product = productRepository.findBySku(cartRequest.getSku());
             if (product.isPresent()) {
-                CartDetail cartDetail = new CartDetail();
-                cartDetail.setQuantity(cartRequest.getQty());
-                cartDetail.setName(product.get().getName());
-                cartDetail.setPrice(product.get().getPrice());
-                cartDetail.setSku(product.get().getSku());
-                cartDetail.setDiscount(BigDecimal.valueOf(0));
-                cartDetail.setFinalPrice(product.get().getPrice());
-                if (checkShopperHaveCart.isPresent()) {
-                    cartDetail.setCartId(checkShopperHaveCart.get().getId());
+
+                Optional<CartDetail> checkCartDetail =
+                        cartDetailRepository.findByCartIdAndSku(
+                                Long.valueOf(
+                                        (checkShopperHaveCart.isPresent())
+                                                ? checkShopperHaveCart.get().getId()
+                                                : newCart.getId()),
+                                product.get().getSku());
+
+                if (checkCartDetail.isEmpty()) {
+                    CartDetail newCartDetail = new CartDetail();
+                    newCartDetail.setQuantity(cartRequest.getQty());
+                    newCartDetail.setName(product.get().getName());
+                    newCartDetail.setPrice(product.get().getPrice());
+                    newCartDetail.setSku(product.get().getSku());
+                    newCartDetail.setDiscount(BigDecimal.valueOf(0));
+                    newCartDetail.setFinalPrice(product.get().getPrice());
+                    if (checkShopperHaveCart.isPresent()) {
+                        newCartDetail.setCartId(checkShopperHaveCart.get().getId());
+                    } else {
+                        newCartDetail.setCartId(newCart.getId());
+                    }
+                    cartDetailRepository.save(newCartDetail);
                 } else {
-                    cartDetail.setCartId(newCart.getId());
+                    checkCartDetail
+                            .get()
+                            .setQuantity(
+                                    checkCartDetail.get().getQuantity() + cartRequest.getQty());
+                    cartDetailRepository.save(checkCartDetail.get());
                 }
-                cartDetailRepository.save(cartDetail);
 
                 response.setUsername(userName);
                 List<CartDetail> cartDetailList =
-                        cartDetailRepository.findByCartId(cartDetail.getCartId());
-                System.out.println(cartDetailList);
+                        cartDetailRepository.findByCartId(
+                                (checkShopperHaveCart.isPresent())
+                                        ? checkShopperHaveCart.get().getId()
+                                        : newCart.getId());
                 BigDecimal totalPriceForReturn = BigDecimal.valueOf(0);
                 BigDecimal totalDiscountForReturn = BigDecimal.valueOf(0);
+                System.out.println(cartDetailList);
                 for (CartDetail item : cartDetailList) {
                     CartItem cartItem =
                             new CartItem(
@@ -119,9 +139,11 @@ public class CartService {
                                     item.getPrice(),
                                     item.getDiscount(),
                                     item.getFinalPrice());
-                    totalPriceForReturn = item.getFinalPrice().plus();
-                    totalDiscountForReturn = item.getDiscount().plus();
+                    totalPriceForReturn = totalPriceForReturn.add(item.getFinalPrice());
+                    totalDiscountForReturn = totalDiscountForReturn.add(item.getDiscount());
+
                     response.getItems().add(cartItem);
+                    System.out.println("Respones:" + response);
                 }
                 if (enableShippingFee) {
                     response.setFee(BigDecimal.valueOf(25));
