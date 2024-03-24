@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.kampus.kbazaar.exceptions.NotFoundException;
 import com.kampus.kbazaar.security.JwtAuthFilter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -81,6 +82,45 @@ public class CartControllerTest {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content("{\"sku\":\"MOBILE-APPLE-IPHONE-12-PRO\",\"qty\":1}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void createCart_ReturnsFailedUserNotFound() throws Exception {
+
+        CartRequest cartRequest = new CartRequest();
+        cartRequest.setSku("MOBILE-APPLE-IPHONE-12-PRO");
+        cartRequest.setQty(1);
+        String username = "TechNinja1";
+
+        Exception exception = new NotFoundException("User not found");
+
+        when(cartService.createCart(username, cartRequest)).thenThrow(exception);
+        mockMvc.perform(
+                        post("/api/v1/carts/{username}/items", username)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content("{\"sku\":\"MOBILE-APPLE-IPHONE-12-PRO\",\"qty\":1}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void createCart_ReturnsFailedProductNotFound() throws Exception {
+
+        CartRequest cartRequest = new CartRequest();
+        cartRequest.setSku("MOBILE-APPLE-IPHONE-12-PRO-MAXMAX");
+        cartRequest.setQty(1);
+        String username = "TechNinja";
+
+        Exception exception = new NotFoundException("Product not found");
+
+        when(cartService.createCart(username, cartRequest)).thenThrow(exception);
+        mockMvc.perform(
+                        post("/api/v1/carts/{username}/items", username)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(
+                                        "{\"sku\":\"MOBILE-APPLE-IPHONE-12-PRO-MAXMAX\",\"qty\":1}"))
+                .andExpect(status().isNotFound());
     }
 
     //    @Test
