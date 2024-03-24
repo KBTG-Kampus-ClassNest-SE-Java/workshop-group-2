@@ -1,11 +1,10 @@
 package com.kampus.kbazaar.cart;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Entity(name = "CartDetail")
 @Data
@@ -35,5 +34,4 @@ public class CartDetail {
 
     @Column(name = "finalPrice")
     private BigDecimal finalPrice;
-
 }

@@ -1,7 +1,5 @@
 package com.kampus.kbazaar.cart;
 
-import com.kampus.kbazaar.product.Product;
-import com.kampus.kbazaar.shopper.Shopper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,11 +16,9 @@ public class Cart {
     @Column(name = "id")
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "shopper_id", referencedColumnName = "id")
-    private Shopper shopper;
+    @Column(name = "shopperid")
+    private Long shopperId;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product[] products;
+    @Column(name = "quantity")
+    private int quantity;
 }

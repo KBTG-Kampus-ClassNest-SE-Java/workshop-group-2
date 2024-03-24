@@ -16,10 +16,15 @@ public class CartService {
     private final PromotionRepository promotionRepository;
     private final ShopperRepository shopperRepository;
 
+    private final CartRepository cartRepository;
+
     public CartService(
-            PromotionRepository promotionRepository, ShopperRepository shopperRepository) {
+            PromotionRepository promotionRepository,
+            ShopperRepository shopperRepository,
+            CartRepository cartRepository) {
         this.promotionRepository = promotionRepository;
         this.shopperRepository = shopperRepository;
+        this.cartRepository = cartRepository;
     }
 
     // story_6
@@ -45,6 +50,23 @@ public class CartService {
             }
         } else {
             throw new BadRequestException("Username not found");
+        }
+    }
+
+    public CreateCartResponse createCart(String userName, CartRequest cartRequest) {
+        Optional<Shopper> shopper = shopperRepository.findByUsername(userName);
+        if (shopper.isPresent()) {
+
+            CreateCartResponse response = new CreateCartResponse();
+            Cart cart = new Cart();
+            cart.setShopperId(shopper.get().getId());
+            cart.setQuantity(cartRequest.getQty());
+            cartRepository.save(cart);
+
+            response.setCartId(cart.getId());
+            return response;
+        } else {
+            throw new BadRequestException("Create cart failed");
         }
     }
 }
