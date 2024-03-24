@@ -71,6 +71,7 @@ public class CartService {
     @Transactional
     public CreateCartResponse createCart(String userName, CartRequest cartRequest) {
         CreateCartResponse response = new CreateCartResponse();
+        response.setItems(new ArrayList<>());
         Optional<Shopper> shopper = shopperRepository.findByUsername(userName);
         Optional<Cart> checkShopperHaveCart = cartRepository.findByShopperId(shopper.get().getId());
 
@@ -115,7 +116,6 @@ public class CartService {
                                     item.getFinalPrice());
                     totalPriceForReturn = item.getFinalPrice().plus();
                     totalDiscountForReturn = item.getDiscount().plus();
-                    response.setItems(new ArrayList<>());
                     response.getItems().add(cartItem);
                 }
                 if (enableShippingFee) {
