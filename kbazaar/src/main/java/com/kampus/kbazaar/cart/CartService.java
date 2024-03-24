@@ -73,7 +73,12 @@ public class CartService {
         CreateCartResponse response = new CreateCartResponse();
         response.setItems(new ArrayList<>());
         Optional<Shopper> shopper = shopperRepository.findByUsername(userName);
+
         Optional<Cart> checkShopperHaveCart = cartRepository.findByShopperId(shopper.get().getId());
+
+        productRepository
+                .findBySku(cartRequest.getSku())
+                .orElseThrow(() -> new NotFoundException("Product not found"));
 
         if (shopper.isPresent()) {
             Cart newCart = new Cart();
@@ -130,7 +135,7 @@ public class CartService {
 
             return response;
         } else {
-            throw new BadRequestException("Product not found");
+            throw new NotFoundException("User not found");
         }
     }
 }
